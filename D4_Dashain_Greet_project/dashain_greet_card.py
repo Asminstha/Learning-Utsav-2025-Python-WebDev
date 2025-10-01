@@ -44,4 +44,7 @@ if name:
     st.balloons() 
     st.markdown("✨🎉" + "="*50 + "🎉✨")
     st.markdown("🎉 Happy Dashain to You & Your Family 🎉")
+
+    st.markdown("🎉✨- Asmin Shrestha ✨🎉")
+
     st.markdown("✨🎉" + "="*50 + "🎉✨")
