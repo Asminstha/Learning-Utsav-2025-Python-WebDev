@@ -1,0 +1,3 @@
+Welcome to Learning Utsav 2025!
+Today I learned about file handling in Python.
+Appending new lines is easy with 'a' mode.
