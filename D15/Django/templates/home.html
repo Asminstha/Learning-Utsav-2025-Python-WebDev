@@ -13,46 +13,36 @@
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
 </head>
-
 <body>
-
-
     <div class="container pt-5">
-        <h3 class="text-center"> Hello Asmin This is loading from Template </h3>
+        <h3 class="text-center"> Employees List  </h3>
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Designation</th>
+                    <th scope="col">Phone Number</th>
                 </tr>
             </thead>
             <tbody>
+                <!-- displaying data on table  -->
+                {% for emp in employees %}
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <th >{{ forloop.counter}} </th>
+                    <td><a href="{%url 'employee_detail' emp.id %}" class="text-decoration-none">{{ emp.first_name  }} {{ emp.last_name }} </a></td>
+                    <td>{{ emp.designation }}</td>
+                    <td>{{ emp.phone_number }}</td>
+                    <!-- <td> {{emp.email_address}}</td> -->
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td>@social</td>
-                </tr>
+              {% endfor %}
             </tbody>
         </table>
-        <img src="{% static 'images/pic.png '%}" alt="" width="510">
     </div>
+
+
+
 </body>
 
 </html>
