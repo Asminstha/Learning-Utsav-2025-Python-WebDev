@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quote of the Day</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 100px; background: #f9f9f9; }
+    .box {
+      display: inline-block;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    {% if quote %}
+      <h2>"{{ quote.text }}"</h2>
+      <p>— {{ quote.author }}</p>
+    {% else %}
+      <p>No quotes available. Add some in the admin panel!</p>
+    {% endif %}
+  </div>
+</body>
+</html>
