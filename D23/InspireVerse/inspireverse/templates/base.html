@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>InspireVerse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    /* small custom */
+  </style>
+</head>
+<body class="bg-gradient-to-r from-purple-50 to-indigo-50 min-h-screen flex flex-col">
+  <nav class="bg-white/70 backdrop-blur p-4 shadow sticky top-0 z-10">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="{% url 'quotes:home' %}" class="text-2xl font-bold text-indigo-600">InspireVerse</a>
+      <div>
+        {% if user.is_authenticated %}
+          <span class="mr-4">Hello, {{ user.username }} 👋</span>
+          <a href="{% url 'quotes:dashboard' %}" class="mr-4">Dashboard</a>
+          <a href="{% url 'users:logout' %}" class="px-3 py-1 rounded border">Logout</a>
+        {% else %}
+          <a href="{% url 'users:login' %}" class="mr-4">Login</a>
+          <a href="{% url 'users:register' %}" class="px-3 py-1 rounded bg-indigo-600 text-white">Sign up</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mx-auto py-12 mb-20">
+    <!-- Messages start -->
+  <div class="container mb-5 mx-auto mt-2 px-6">
+    {% if messages %}
+      <div class="space-y-2" id="message-container">
+        {% for message in messages %}
+          <div class="p-4 rounded-md
+                      {% if message.tags == 'success' %}bg-green-100 text-green-700
+                      {% elif message.tags == 'error' %}bg-red-100 text-red-700
+                      {% elif message.tags == 'info' %}bg-blue-100 text-blue-700
+                      {% else %}bg-gray-100 text-gray-700{% endif %} transition-opacity duration-700 opacity-100">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+  <!-- Messages end -->
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ✅ Fixed footer -->
+  <footer class="fixed bottom-0 left-0 w-full bg-white/70 backdrop-blur text-center py-4 text-sm text-gray-600 shadow-inner">
+    © {% now "Y" %} InspireVerse @AsminShrestha
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 700, once: true })
+  </script>
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const messages = document.querySelectorAll('#message-container div');
+  messages.forEach(msg => {
+    // wait 3 seconds, then fade out
+    setTimeout(() => {
+      msg.classList.add('opacity-0'); // fades out
+      // remove from DOM after transition (700ms)
+      setTimeout(() => msg.remove(), 700);
+    }, 3000);
+  });
+});
+</script>
+
+</body>
+
+</html>

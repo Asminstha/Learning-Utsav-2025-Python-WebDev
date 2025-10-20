@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-6xl mx-auto">
+  <header class="text-center mb-8" data-aos="fade-down">
+    <h1 class="text-5xl font-extrabold text-indigo-700">InspireVerse</h1>
+    <p class="text-gray-600 mt-2">Share quotes. Get inspired. Like & enjoy.</p>
+    <p class="mt-2 text-sm text-gray-500">Total visits: {{ stat.home_visits }}</p>
+  </header>
+
+  <div class="flex justify-end mb-6">
+    {% if user.is_authenticated %}
+      <a href="{% url 'quotes:add' %}" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow hover:scale-105 transition">Add Quote</a>
+    {% else %}
+      <a href="{% url 'users:login' %}" class="px-4 py-2 border rounded-md">Login to post</a>
+    {% endif %}
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for q in quotes %}
+    <div class="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition transform hover:-translate-y-1" data-aos="flip-left" data-id="{{ q.id }}">
+      <p class="text-lg leading-relaxed">“{{ q.text }}”</p>
+      <p class="mt-3 text-sm text-gray-500">— {{ q.quoted_by|default:q.author.username }}</p>
+      <div class="mt-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button class="like-btn flex items-center gap-2 px-3 py-1 rounded-md border" data-id="{{ q.id }}">
+            <span class="like-emoji">❤️</span>
+            <span class="like-count">{{ q.like_count }}</span>
+          </button>
+          <span class="text-sm text-gray-600">Views: <span class="view-count">{{ q.views }}</span></span>
+        </div>
+        <small class="text-xs text-gray-400">{{ q.created_at|date:"M j, Y" }}</small>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- include CSRF token in a hidden form so JS can read cookie-less pages -->
+<form style="display:none">{% csrf_token %}</form>
+
+<script>
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+document.addEventListener('DOMContentLoaded', ()=> {
+  document.querySelectorAll('.like-btn').forEach(btn=>{
+    btn.addEventListener('click', async (e)=>{
+      const id = btn.dataset.id;
+      const resp = await fetch("{% url 'quotes:toggle_like' %}", {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'id=' + encodeURIComponent(id)
+      });
+      if (!resp.ok) return;
+      const data = await resp.json();
+      btn.querySelector('.like-count').innerText = data.like_count;
+      btn.animate([{ transform: 'scale(1.0)' }, { transform: 'scale(1.15)' }, { transform: 'scale(1.0)' }], { duration: 200 });
+    });
+  });
+
+  // increment views for each shown card once
+  document.querySelectorAll('[data-id]').forEach(async el=>{
+    const id = el.dataset.id;
+    try {
+      const resp = await fetch("{% url 'quotes:increment_view' %}", {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'id=' + encodeURIComponent(id)
+      });
+      if (!resp.ok) return;
+      const data = await resp.json();
+      const viewSpan = el.querySelector('.view-count');
+      if (viewSpan) viewSpan.innerText = data.views;
+    } catch (err) {}
+  });
+});
+</script>
+{% endblock %}

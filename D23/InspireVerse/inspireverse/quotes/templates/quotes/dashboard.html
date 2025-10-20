@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-3xl mx-auto">
+  <div class="bg-white p-8 rounded-2xl shadow" data-aos="fade-right">
+    <h2 class="text-2xl font-bold mb-4">Your Dashboard</h2>
+    <h2 class="text-2xl font-bold mb-4">Welcome, {{ user.first_name }} {{ user.last_name }}</h2>
+    
+<p class="text-gray-600">Email: {{ user.email }}</p>
+<p class="text-gray-600">Username: {{ user.username }}</p>
+
+    <ul class="space-y-2">
+      <li>Total posts: <strong>{{ total }}</strong></li>
+      <li>Approved: <strong>{{ approved }}</strong></li>
+      <li>Pending / Disapproved: <strong>{{ disapproved }}</strong></li>
+    </ul>
+    <a href="{% url 'quotes:add' %}" class="inline-block mt-6 px-4 py-2 bg-indigo-600 text-white rounded-md">Add another quote</a>
+  </div>
+</div>
+{% endblock %}
