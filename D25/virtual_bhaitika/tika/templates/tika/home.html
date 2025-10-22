@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="container-fluid hero-section text-center text-light p-5" style="position: relative; overflow: hidden;">
+    <h1 class="display-4 fw-bold mb-3">🎉 Welcome to Bhai Tika Cards! 🎉</h1>
+    <p class="lead mb-4">Send warm Tihar wishes with personalized cards to your brothers and sisters.</p>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'create_card' %}" class="btn btn-warning btn-lg fw-bold shadow-lg me-2">Create Your Card</a>
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-lg fw-bold shadow-lg">View Your Cards</a>
+    {% else %}
+        <a href="{% url 'login' %}?next={% url 'create_card' %}" class="btn btn-warning btn-lg fw-bold shadow-lg me-2">Login to Create Card</a>
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-lg fw-bold shadow-lg">View Cards</a>
+    {% endif %}
+
+    <!-- Flickering diyas -->
+    <div class="diyas">
+        <div class="diya"></div>
+        <div class="diya"></div>
+        <div class="diya"></div>
+    </div>
+
+    <!-- Confetti -->
+    <canvas id="confetti"></canvas>
+</div>
+
+<!-- Features Section -->
+<div class="container mt-5">
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="feature-card p-4 shadow-lg rounded">
+                <h4>🎨 Customize Your Card</h4>
+                <p>Choose themes, add images and write heartfelt messages for your loved ones.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="feature-card p-4 shadow-lg rounded">
+                <h4>💌 Share Easily</h4>
+                <p>Share your card link anywhere, your brother or sister can open it instantly.</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="feature-card p-4 shadow-lg rounded">
+                <h4>📥 Download Cards</h4>
+                <p>Download your created cards as images to keep memories forever.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Styles -->
+<style>
+.hero-section {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    border-radius: 20px;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.feature-card {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #fff;
+    transition: transform 0.3s;
+}
+.feature-card:hover {
+    transform: scale(1.05);
+}
+
+/* Diyas animation */
+.diyas {
+    position: absolute;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+.diya {
+    width: 15px; height: 15px;
+    background: orange;
+    border-radius: 50%;
+    box-shadow: 0 0 15px yellow;
+    margin: 0 10px;
+    animation: flicker 1.5s infinite;
+}
+@keyframes flicker {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+/* Confetti canvas */
+#confetti {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index: 0;
+}
+</style>
+
+<!-- Confetti JS -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+const confettiCanvas = document.getElementById('confetti');
+const confettiCtx = confettiCanvas.getContext('2d');
+function launchConfetti() {
+    confetti({
+        particleCount: 50,
+        spread: 70,
+        origin: { y: 0.6 }
+    });
+}
+setInterval(launchConfetti, 2000);
+</script>
+
+{% endblock %}

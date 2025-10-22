@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-warning fw-bold">🎉 Your Bhai Tika Cards 🎉</h2>
+
+    <!-- Create new card button -->
+    <div class="text-center mb-4">
+        {% if user.is_authenticated %}
+        <a href="{% url 'create_card' %}" class="btn btn-warning btn-lg fw-bold shadow-sm">Create New Card</a>
+        {% else %}
+        <a href="{% url 'login' %}?next={% url 'create_card' %}" class="btn btn-warning btn-lg fw-bold shadow-sm">
+    Login to Create Card
+</a>
+
+        {% endif %}
+    </div>
+
+    <div class="row">
+        {% if cards %}
+        {% for card in cards %}
+        <div class="col-md-4 mb-4">
+            <div class="card tika-card {{ card.theme }} p-3 shadow-lg position-relative">
+                <!-- Flickering diyas in each card -->
+                <div class="diyas">
+                    <div class="diya"></div>
+                    <div class="diya"></div>
+                </div>
+
+                <h5 class="text-center mt-2">To: {{ card.recipient_name }}</h5>
+                <p class="text-center">{{ card.message|truncatechars:50 }}</p>
+                {% if card.image %}
+                <img src="{{ card.image.url }}" class="img-fluid rounded mt-2" alt="Card Image">
+                {% endif %}
+
+                <div class="text-center mt-3">
+                    <a href="{% url 'preview_card' card.uuid %}" class="btn btn-outline-light btn-sm shadow">Preview</a>
+
+                    <form method="POST" action="{% url 'delete_card' card.uuid %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm shadow">Delete</button>
+                    </form>
+                </div>
+
+                <p class="text-center mt-2 text-light"><small>Theme: {{ card.get_theme_display }}</small></p>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-center text-muted fw-bold">No cards created yet. Click “Create New Card” to start!</p>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    /* Card Themes */
+    .tika-card.classic {
+        background: linear-gradient(45deg, #ff4d4d, #ffd700);
+        color: #fff;
+        border-radius: 20px;
+    }
+
+    .tika-card.modern {
+        background: linear-gradient(90deg, #6a11cb, #2575fc);
+        color: #fff;
+        border-radius: 20px;
+    }
+
+    .tika-card.fun {
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        color: #333;
+        border-radius: 20px;
+    }
+
+    /* Diyas animation */
+    .diyas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .diya {
+        width: 15px;
+        height: 15px;
+        background: orange;
+        border-radius: 50%;
+        box-shadow: 0 0 10px yellow;
+        position: absolute;
+        animation: flicker 1.5s infinite;
+    }
+
+    .diya:nth-child(1) {
+        top: 5px;
+        left: 10px;
+    }
+
+    .diya:nth-child(2) {
+        top: 5px;
+        right: 10px;
+    }
+
+    @keyframes flicker {
+
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 0.6;
+            transform: scale(1.2);
+        }
+    }
+
+    /* Card hover effect */
+    .tika-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        transition: 0.3s;
+    }
+</style>
+{% endblock %}

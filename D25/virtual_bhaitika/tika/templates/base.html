@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Bhai Tika</title>
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #fffae6, #fff3e6);
+        }
+        .tika-card {
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 15px #ffa500;
+            background-color: #fff8e6;
+        }
+        .btn-warning:hover {
+      background-color: #ffbf47;
+      color: #fff;
+      transition: 0.3s;
+  }
+  .btn-outline-warning:hover {
+      background-color: #ffbf47;
+      color: #fff;
+      transition: 0.3s;
+  }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/">Virtual Bhai Tika</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        {% if request.user.is_authenticated %}
+        <li class="nav-item me-3">
+          <!-- Show user name -->
+          <span class="navbar-text fw-semibold text-dark">
+            Welcome, {{ request.user.username }}!
+          </span>
+        </li>
+        <li class="nav-item me-3">
+  <a class="btn btn-outline-primary btn-sm fw-bold" href="{% url 'dashboard' %}">Dashboard</a>
+</li>
+
+        <li class="nav-item">
+          <!-- Styled Logout button -->
+          <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-warning btn-sm fw-bold">Logout</button>
+          </form>
+        </li>
+        {% else %}
+        <li class="nav-item me-2">
+          <a class="btn btn-warning btn-sm fw-bold" href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="btn btn-warning btn-sm fw-bold" href="{% url 'signup' %}">Sign Up</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

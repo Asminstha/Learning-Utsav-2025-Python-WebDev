@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Create Your Bhai Tika Card</h2>
+    <form method="POST" enctype="multipart/form-data" class="card p-4 shadow">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-warning fw-bold">Preview Card</button>
+    </form>
+</div>
+{% endblock %}

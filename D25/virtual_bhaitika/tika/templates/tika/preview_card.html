@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 mb-3">
+    <h2 class="text-center mb-4">Preview of Your Bhai Tika Card</h2>
+
+    <!-- Card container with dynamic theme -->
+    <div class="card tika-card {{ card.theme }}" id="cardContent" 
+         style="max-width:500px; margin:auto; position:relative; overflow:hidden; padding:20px; border-radius:20px;">
+        
+        <!-- Decorative diyas animation -->
+        <div class="diyas">
+            <div class="diya"></div>
+            <div class="diya"></div>
+        </div>
+
+        <h4 class="text-center">To: {{ card.recipient_name }}</h4>
+        <p class="text-center">{{ card.message }}</p>
+
+        {% if card.image %}
+        <img src="{{ card.image.url }}" class="img-fluid rounded mt-3" alt="Card Image">
+        {% endif %}
+
+        <p class="text-center mt-3"><strong>Theme:</strong> {{ card.get_theme_display }}</p>
+    </div>
+
+    <!-- Buttons outside the card -->
+    <div class="text-center mt-3">
+        <!-- Shareable link -->
+        <input type="text" class="form-control mb-2" value="{{ request.build_absolute_uri }}" id="shareLink" readonly>
+        <button class="btn btn-outline-warning btn-sm mb-2" onclick="copyLink()">Copy Link</button>
+        <!-- Download card -->
+        <button class="btn btn-warning btn-sm" onclick="downloadCard()">Download Card</button>
+    </div>
+
+    <div class="text-center mt-2">
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-primary w-50">Back to Dashboard</a>
+    </div>
+</div>
+
+<!-- JS Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+function copyLink() {
+    const copyText = document.getElementById("shareLink");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    alert("Link copied! You can share it anywhere.");
+}
+
+function downloadCard() {
+    const card = document.getElementById('cardContent');
+    html2canvas(card).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'bhai_tika_card.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+}
+</script>
+
+<style>
+/* Card Themes */
+.tika-card.classic {
+    background: linear-gradient(45deg, #ff4d4d, #ffd700);
+    color: #fff;
+}
+.tika-card.modern {
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    color: #fff;
+}
+.tika-card.fun {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    color: #333;
+}
+
+/* Diyas animation */
+.diyas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+}
+
+.diya {
+    width: 20px; height: 20px;
+    background: orange;
+    border-radius: 50%;
+    box-shadow: 0 0 10px yellow;
+    position: absolute;
+    animation: flicker 1.5s infinite;
+}
+
+.diya:nth-child(1) { top:10px; left:20px; }
+.diya:nth-child(2) { top:10px; right:20px; }
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+/* Button Hover Effects */
+.btn-warning:hover, .btn-outline-warning:hover {
+    background-color: #ffbf47 !important;
+    color: #fff !important;
+    transition: 0.3s;
+}
+</style>
+{% endblock %}
