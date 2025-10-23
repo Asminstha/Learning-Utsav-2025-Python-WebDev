@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+{% block title %}Contact - {{ settings.site_name }}{% endblock %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Contact Us</h2>
+      <p>Drop a message and we will respond soon.</p>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-accent mt-2">Send Message</button>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <h4>Find Us</h4>
+      <p>Address and phone here. Use admin to edit SiteSettings footer/contact info.</p>
+    </div>
+  </div>
+{% endblock %}

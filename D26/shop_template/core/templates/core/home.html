@@ -1,0 +1,50 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Home - {{ settings.site_name }}{% endblock %}
+{% block content %}
+  <section class="text-center py-5" style="background: linear-gradient(180deg, rgba(13,110,253,0.05), transparent); border-radius:12px;">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h1 class="display-5" style="color:var(--text-dark);">{{ settings.site_name }}</h1>
+        <p class="lead">{{ settings.hero_text|default:"Welcome to our shop. We provide quality services and products." }}</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">Contact Us</a>
+      </div>
+      <div class="col-md-6 text-center">
+        <img src="{% static 'core/img/hero.webp' %}" alt="hero" class="img-fluid" style="max-height:260px;">
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-5">
+    <h2 class="mb-4">Our Services</h2>
+    <div class="row g-4">
+      {% for s in services %}
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm p-3">
+          <div class="card-body">
+            <h5 class="card-title">{{ s.title }}</h5>
+            <p class="card-text">{{ s.description|truncatewords:25 }}</p>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p>No services yet. Add some in the admin panel.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="mt-5">
+    <h2 class="mb-3">Gallery</h2>
+    <div class="row g-3">
+      {% for img in gallery %}
+      <div class="col-6 col-md-3">
+        <div class="card">
+          <img src="{{ img.image.url }}" class="card-img-top" alt="{{ img.title }}">
+        </div>
+      </div>
+      {% empty %}
+      <p>No images yet. Add gallery images via admin.</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}
