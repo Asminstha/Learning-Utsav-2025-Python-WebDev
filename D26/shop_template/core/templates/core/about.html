@@ -1,0 +1,46 @@
+{% extends "core/base.html" %}
+{% block title %}About Us - {{ settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+  <div class="container">
+    {% if about_us %}
+    <div class="row align-items-center">
+      <!-- Text Column -->
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <h1 class="display-4 fw-bold text-primary mb-3">{{ about_us.title }}</h1>
+        {% if about_us.subtitle %}
+        <p class="lead text-secondary mb-4">{{ about_us.subtitle }}</p>
+        {% endif %}
+        <div class="fs-5">
+          {{ about_us.content|safe }}
+        </div>
+      </div>
+
+      <!-- Image Column -->
+      <div class="col-lg-6 text-center">
+        {% if about_us.image %}
+        <img src="{{ about_us.image.url }}" class="img-fluid rounded shadow-lg" alt="About Us">
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row text-center mt-5">
+      {% for feature in features %}
+      <div class="col-md-4 mb-4">
+        <div class="p-4 bg-white rounded shadow-sm h-100">
+          <h3 class="text-primary mb-3">{{ feature.icon }} {{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center">No features added yet. Add them in admin → Features.</p>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center">No About Us content yet. Add it in admin panel → About Us.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

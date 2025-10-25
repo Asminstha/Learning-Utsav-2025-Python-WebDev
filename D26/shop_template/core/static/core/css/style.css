@@ -11,6 +11,7 @@ body.dark-mode {
   color: var(--text-light);
 }
 
+
 /* Simple fade-in animation */
 .fade-in {
   opacity: 0;
@@ -34,3 +35,6 @@ body.dark-mode {
   border: none;
   color: #000;
 }
+
+
+

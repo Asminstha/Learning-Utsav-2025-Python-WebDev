@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
+from ckeditor.fields import RichTextField
 class SiteSettings(models.Model):
     site_name = models.CharField(max_length=200, default="My Shop")
     logo = models.ImageField(upload_to="logo/", blank=True, null=True)
@@ -9,18 +9,42 @@ class SiteSettings(models.Model):
     accent_color = models.CharField(max_length=7, default="#ffc107")
     hero_text = models.CharField(max_length=255, blank=True)
     footer_text = models.CharField(max_length=255, blank=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=50, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    map_embed_url = models.TextField(blank=True, null=True)
+    facebook_url = models.URLField(blank=True)
+    instagram_url = models.URLField(blank=True)
+    linkedin_url = models.URLField(blank=True)
+    
+
+
 
     def __str__(self):
-        return "Site Settings"
+        return self.site_name
 
     class Meta:
         verbose_name_plural = "Site Settings"
 
-class Page(models.Model):
-    slug = models.SlugField(unique=True)
-    title = models.CharField(max_length=200)
-    content = models.TextField(blank=True)
+
+class AboutUs(models.Model):
+    title = models.CharField(max_length=200, default="About Us")
+    subtitle = models.CharField(max_length=300, blank=True)
+    content = RichTextField(blank=True)  
+    image = models.ImageField(upload_to="about/", blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "About Us Section"
+
+class Feature(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    icon = models.CharField(max_length=50, blank=True, help_text="Use emoji or Bootstrap icon class")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return self.title

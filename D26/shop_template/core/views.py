@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import SiteSettings, Page, Service, GalleryImage
+from .models import SiteSettings, Service, GalleryImage , AboutUs , Feature
 from .forms import ContactForm
 from django.contrib import messages
 
@@ -12,17 +12,29 @@ def home(request):
     settings = get_site_settings()
     services = Service.objects.all().order_by("order")
     gallery = GalleryImage.objects.all().order_by("-added_at")[:8]
+    about_us = AboutUs.objects.first()   
+    features = Feature.objects.all()    
     context = {
         "settings": settings,
         "services": services,
         "gallery": gallery,
+        "about_us": about_us,
+        "features": features,
     }
     return render(request, "core/home.html", context)
 
+
+
 def about(request):
     settings = get_site_settings()
-    page = Page.objects.filter(slug="about").first()
-    return render(request, "core/about.html", {"settings": settings, "page": page})
+    about_us = AboutUs.objects.first()
+    features = Feature.objects.all()
+    context = {
+        "settings": settings,
+        "about_us": about_us,
+        "features": features,
+    }
+    return render(request, "core/about.html", context)
 
 def services_view(request):
     settings = get_site_settings()
@@ -47,3 +59,8 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, "core/contact.html", {"settings": settings, "form": form})
+
+
+def contact_view(request):
+    site_settings = SiteSettings.objects.first()
+    return render(request, "contact.html", {"site_settings": site_settings})

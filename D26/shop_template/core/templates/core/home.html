@@ -1,50 +1,100 @@
 {% extends "core/base.html" %}
 {% load static %}
 {% block title %}Home - {{ settings.site_name }}{% endblock %}
+
 {% block content %}
-  <section class="text-center py-5" style="background: linear-gradient(180deg, rgba(13,110,253,0.05), transparent); border-radius:12px;">
+
+<!-- Hero Section -->
+<section class="text-center py-5" style="background: linear-gradient(180deg, rgba(13,110,253,0.05), transparent); border-radius:12px;">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <h1 class="display-5" style="color:var(--text-dark);">{{ settings.site_name }}</h1>
+      <p class="lead">{{ settings.hero_text|default:"Welcome to our shop. We provide quality services and products." }}</p>
+      <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">Contact Us</a>
+    </div>
+    <div class="col-md-6 text-center">
+      <img src="{% static 'core/img/hero.webp' %}" alt="hero" class="img-fluid" style="max-height:260px;">
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section class="mt-5">
+  <h2 class="mb-4">Our Services</h2>
+  <div class="row g-4">
+    {% for s in services %}
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm p-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ s.title }}</h5>
+          <p class="card-text">{{ s.description|truncatewords:25 }}</p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p>No services yet. Add some in the admin panel.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- About Us Section -->
+{% if about_us %}
+<section class="mt-5 py-5 bg-light rounded-3">
+  <div class="container">
     <div class="row align-items-center">
-      <div class="col-md-6">
-        <h1 class="display-5" style="color:var(--text-dark);">{{ settings.site_name }}</h1>
-        <p class="lead">{{ settings.hero_text|default:"Welcome to our shop. We provide quality services and products." }}</p>
-        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">Contact Us</a>
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <h2 class="display-6 fw-bold text-primary mb-3">{{ about_us.title }}</h2>
+        {% if about_us.subtitle %}
+        <p class="lead text-secondary mb-4">{{ about_us.subtitle }}</p>
+        {% endif %}
+        <div class="fs-5">
+          {{ about_us.content|safe }}
+        </div>
       </div>
-      <div class="col-md-6 text-center">
-        <img src="{% static 'core/img/hero.webp' %}" alt="hero" class="img-fluid" style="max-height:260px;">
+      <div class="col-lg-6 text-center">
+        {% if about_us.image %}
+        <img src="{{ about_us.image.url }}" class="img-fluid rounded shadow" alt="About Us">
+        {% endif %}
       </div>
     </div>
-  </section>
+  </div>
+</section>
+{% endif %}
 
-  <section class="mt-5">
-    <h2 class="mb-4">Our Services</h2>
-    <div class="row g-4">
-      {% for s in services %}
-      <div class="col-md-4">
-        <div class="card h-100 shadow-sm p-3">
-          <div class="card-body">
-            <h5 class="card-title">{{ s.title }}</h5>
-            <p class="card-text">{{ s.description|truncatewords:25 }}</p>
-          </div>
+<!-- Features Section -->
+{% if features %}
+<section class="mt-5 py-5">
+  <div class="container">
+    <div class="row text-center">
+      {% for feature in features %}
+      <div class="col-md-4 mb-4">
+        <div class="p-4 bg-white rounded shadow-sm h-100">
+          <h3 class="text-primary mb-3">{{ feature.icon }} {{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
         </div>
       </div>
       {% empty %}
-      <p>No services yet. Add some in the admin panel.</p>
+      <p class="text-center">No features added yet. Add them in admin → Features.</p>
       {% endfor %}
     </div>
-  </section>
+  </div>
+</section>
+{% endif %}
 
-  <section class="mt-5">
-    <h2 class="mb-3">Gallery</h2>
-    <div class="row g-3">
-      {% for img in gallery %}
-      <div class="col-6 col-md-3">
-        <div class="card">
-          <img src="{{ img.image.url }}" class="card-img-top" alt="{{ img.title }}">
-        </div>
+<!-- Gallery Section -->
+<section class="mt-5">
+  <h2 class="mb-3">Gallery</h2>
+  <div class="row g-3">
+    {% for img in gallery %}
+    <div class="col-6 col-md-3">
+      <div class="card">
+        <img src="{{ img.image.url }}" class="card-img-top" alt="{{ img.title }}">
       </div>
-      {% empty %}
-      <p>No images yet. Add gallery images via admin.</p>
-      {% endfor %}
     </div>
-  </section>
+    {% empty %}
+    <p>No images yet. Add gallery images via admin.</p>
+    {% endfor %}
+  </div>
+</section>
+
 {% endblock %}
