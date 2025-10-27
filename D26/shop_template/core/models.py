@@ -55,6 +55,9 @@ class Service(models.Model):
     icon = models.CharField(max_length=100, blank=True, help_text="Bootstrap icon class or font-awesome class")
     order = models.IntegerField(default=0)
 
+    class Meta:
+        ordering = ['order']
+
     def __str__(self):
         return self.title
 

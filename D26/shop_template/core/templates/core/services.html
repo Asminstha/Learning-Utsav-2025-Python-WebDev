@@ -1,0 +1,27 @@
+{% extends "core/base.html" %}
+{% block title %}Services - {{ settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="py-3">
+  <div class="container">
+    <h2 class="mb-4 text-center text-primary">Our Services</h2>
+    <div class="row g-4">
+      {% for s in services %}
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm p-3 text-center">
+          {% if s.icon %}
+          <div class="display-4 mb-3">{{ s.icon }}</div>
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ s.title }}</h5>
+            <p class="card-text">{{ s.description }}</p>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center">No services added yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
