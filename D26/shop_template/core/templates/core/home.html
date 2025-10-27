@@ -19,23 +19,30 @@
 </section>
 
 <!-- Services Section -->
-<section class="mt-5">
-  <h2 class="mb-4">Our Services</h2>
-  <div class="row g-4">
-    {% for s in services %}
-    <div class="col-md-4">
-      <div class="card h-100 shadow-sm p-3">
-        <div class="card-body">
-          <h5 class="card-title">{{ s.title }}</h5>
-          <p class="card-text">{{ s.description|truncatewords:25 }}</p>
+{% if services %}
+<section class="mt-5 py-5 bg-light rounded-3">
+  <div class="container">
+    <h2 class="mb-4 text-center text-primary">Our Services</h2>
+    <div class="row g-4">
+      {% for s in services %}
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm p-3 text-center">
+          {% if s.icon %}
+          <div class="display-4 mb-3">{{ s.icon }}</div>
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ s.title }}</h5>
+            <p class="card-text">{{ s.description|truncatewords:25 }}</p>
+          </div>
         </div>
       </div>
+      {% empty %}
+      <p class="text-center">No services yet. Add some in the admin panel.</p>
+      {% endfor %}
     </div>
-    {% empty %}
-    <p>No services yet. Add some in the admin panel.</p>
-    {% endfor %}
   </div>
 </section>
+{% endif %}
 
 <!-- About Us Section -->
 {% if about_us %}
@@ -82,19 +89,29 @@
 {% endif %}
 
 <!-- Gallery Section -->
-<section class="mt-5">
-  <h2 class="mb-3">Gallery</h2>
-  <div class="row g-3">
-    {% for img in gallery %}
-    <div class="col-6 col-md-3">
-      <div class="card">
-        <img src="{{ img.image.url }}" class="card-img-top" alt="{{ img.title }}">
-      </div>
+<section class="mt-5 py-5 bg-light" id="gallery">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold">Gallery</h2>
+      <a href="{% url 'gallery' %}" class="btn btn-outline-primary btn-sm">View All</a>
     </div>
-    {% empty %}
-    <p>No images yet. Add gallery images via admin.</p>
-    {% endfor %}
+
+    <div class="row g-3">
+      {% for img in gallery %}
+      <div class="col-6 col-md-3" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:'100' }}">
+        <div class="gallery-item position-relative overflow-hidden rounded-4 shadow-sm">
+          <a href="{{ img.image.url }}" data-lightbox="home-gallery" data-title="{{ img.title }}">
+            <img src="{{ img.image.url }}" class="img-fluid gallery-img" alt="{{ img.title }}">
+          </a>
+          <div class="gallery-overlay d-flex align-items-center justify-content-center">
+            <small class="text-white text-center px-2">{{ img.title }}</small>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center text-muted">No images yet. Add some from the admin panel.</p>
+      {% endfor %}
+    </div>
   </div>
 </section>
-
 {% endblock %}
