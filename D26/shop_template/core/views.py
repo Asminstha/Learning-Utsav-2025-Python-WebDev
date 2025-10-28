@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import SiteSettings, Service, GalleryImage , AboutUs , Feature
+from .models import SiteSettings, Service, GalleryImage , AboutUs , Feature ,Testimonial, TeamMember
 from .forms import ContactForm
 from django.contrib import messages
 
@@ -14,12 +14,16 @@ def home(request):
     gallery = GalleryImage.objects.all().order_by("-added_at")[:8]
     about_us = AboutUs.objects.first()   
     features = Feature.objects.all()    
+    testimonials = Testimonial.objects.all()
+    team_members = TeamMember.objects.all()
     context = {
         "settings": settings,
         "services": services,
         "gallery": gallery,
         "about_us": about_us,
         "features": features,
+        "testimonials": testimonials,
+        "team_members": team_members,
     }
     return render(request, "core/home.html", context)
 

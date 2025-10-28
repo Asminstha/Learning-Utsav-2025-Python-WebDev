@@ -114,4 +114,52 @@
     </div>
   </div>
 </section>
+
+<!-- testimonials section  -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="fw-bold text-center mb-4">What Our Clients Say</h2>
+    <div class="row g-4">
+      {% for t in testimonials %}
+      <div class="col-md-4">
+        <div class="card p-3 shadow-sm h-100">
+          {% if t.client_photo %}
+          <img src="{{ t.client_photo.url }}" class="rounded-circle mx-auto d-block mb-3" width="80" height="80" alt="{{ t.client_name }}">
+          {% endif %}
+          <h5 class="text-center">{{ t.client_name }}</h5>
+          <p class="text-muted text-center">{{ t.message|safe }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center">No testimonials yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Team Members Section -->
+<section class="py-5" id="team">
+  <div class="container">
+    <h2 class="fw-bold text-center mb-5">Meet Our Team</h2>
+    <div class="row g-4">
+      {% for member in team_members %}
+      <div class="col-md-3 col-sm-6" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'100' }}">
+        <div class="card shadow-sm text-center rounded-4 p-3 h-200">
+          <img src="{{ member.photo.url }}" class="rounded-circle mx-auto d-block mb-3" width="120" height="120" alt="{{ member.name }}">
+          <h5 class="fw-bold">{{ member.name }}</h5>
+          <p class="text-muted">{{ member.role }}</p>
+          <div class="d-flex justify-content-center gap-2">
+            {% if member.linkedin %}<a href="{{ member.linkedin }}" target="_blank" class="text-primary"><i class="bi bi-linkedin"></i></a>{% endif %}
+            {% if member.instagram %}<a href="{{ member.instagram }}" target="_blank" class="text-danger"><i class="bi bi-instagram"></i></a>{% endif %}
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center text-muted">No team members yet. Add them from admin panel.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
 {% endblock %}

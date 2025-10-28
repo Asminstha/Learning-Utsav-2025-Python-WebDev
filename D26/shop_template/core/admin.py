@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import AboutUs , Feature
-from .models import SiteSettings, Service, GalleryImage, ContactMessage
+from .models import SiteSettings, Service, GalleryImage, ContactMessage , Testimonial, TeamMember
 
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
@@ -28,3 +28,18 @@ class GalleryImageAdmin(admin.ModelAdmin):
 class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ("name", "email", "subject", "created_at", "handled")
     list_filter = ("handled",)
+
+
+
+
+@admin.register(Testimonial)
+class TestimonialAdmin(admin.ModelAdmin):
+    list_display = ('client_name', 'created_at')
+    search_fields = ('client_name', 'message')
+    list_filter = ('created_at',)
+
+@admin.register(TeamMember)
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ('name', 'role')
+    search_fields = ('name', 'role')
+
