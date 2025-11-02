@@ -107,3 +107,19 @@ class TeamMember(models.Model):
 
 
 
+
+class FAQ(models.Model):
+    question = models.CharField(max_length=250)
+    answer = models.TextField()
+    order = models.PositiveIntegerField(default=1)
+    
+    def __str__(self):
+        return self.question
+
+
+class NewsletterSubscriber(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import AboutUs , Feature
-from .models import SiteSettings, Service, GalleryImage, ContactMessage , Testimonial, TeamMember
+from .models import SiteSettings, Service, GalleryImage, ContactMessage , Testimonial, TeamMember ,FAQ , NewsletterSubscriber
 
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
@@ -43,3 +43,17 @@ class TeamMemberAdmin(admin.ModelAdmin):
     list_display = ('name', 'role')
     search_fields = ('name', 'role')
 
+@admin.register(FAQ)
+class FAQAdmin(admin.ModelAdmin):
+    list_display = ('question', 'order')
+    search_fields = ('question',)
+    list_filter = ('order',)
+    ordering = ('order',)
+
+
+
+@admin.register(NewsletterSubscriber)
+class NewsletterSubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'subscribed_at')
+    search_fields = ('email',)
+    ordering = ('-subscribed_at',)

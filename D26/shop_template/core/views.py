@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import SiteSettings, Service, GalleryImage , AboutUs , Feature ,Testimonial, TeamMember
+from .models import SiteSettings, Service, GalleryImage , AboutUs , Feature ,Testimonial, TeamMember ,FAQ , NewsletterSubscriber
 from .forms import ContactForm
 from django.contrib import messages
 
@@ -16,6 +16,21 @@ def home(request):
     features = Feature.objects.all()    
     testimonials = Testimonial.objects.all()
     team_members = TeamMember.objects.all()
+    faqs = FAQ.objects.all().order_by("order")
+
+
+ # Handle Newsletter Subscription
+    if request.method == "POST" and 'newsletter_email' in request.POST:
+        email = request.POST.get("newsletter_email")
+        if email:
+            subscriber, created = NewsletterSubscriber.objects.get_or_create(email=email)
+            if created:
+                messages.success(request, "Thank you for subscribing to our newsletter!")
+            else:
+                messages.info(request, "You are already subscribed.")
+        return redirect("home")
+
+
     context = {
         "settings": settings,
         "services": services,
@@ -24,6 +39,7 @@ def home(request):
         "features": features,
         "testimonials": testimonials,
         "team_members": team_members,
+        "faqs": faqs,
     }
     return render(request, "core/home.html", context)
 
@@ -68,3 +84,6 @@ def contact(request):
 def contact_view(request):
     site_settings = SiteSettings.objects.first()
     return render(request, "contact.html", {"site_settings": site_settings})
+
+
+
